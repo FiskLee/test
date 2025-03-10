@@ -1,0 +1,50 @@
+<div data-bind="with: currentDoc" id="docsView">
+        <div data-bind="visible: name === ''" style="display: none;">
+            <h1>API Documentation Browser</h1>
+            <h2 id="AMPVersion"></h2>
+            <p><em>Note: To see the full API specification without logging in, you must edit the following setting in AMPConfig.conf:</em></p>
+            <pre>Security.AllowAPIDiscoveryWithoutLogin=True</pre>
+            <p>AMP API calls are performed by making a POST request to the endpoint for a given call. All requests must have the following header appended:</p>
+            <pre>Accept: text/javascript or Accept: application/json</pre>
+            <p>Parameters are passed in the form of a JSON blob containing all the parameters as an object (the parameters are fields within that object). This should be posted as a parameter in the POST body called "parameters"</p>
+            <p>To perform any API calls you must first call the Core/Login method which will return a session ID. The session id must be passed along with the parameters JSON blob with a field called "SESSIONID"</p>
+            <h2>Example</h2>
+            <p>If you wished to modify the EnableVoiceChat setting in the ARMA3 module after logging in. You'd make an API call to the following endpoint:</p>
+            <pre>http://localhost:8080/API/Core/SetConfig</pre>
+            <p>And your POST body would be the following (where the SESSIONID was obtained by making a login call):</p>
+            <pre>{"node":"Arma3Module.Arma3Settings.EnableVoiceChat","value":false, SESSIONID: "4202b4ca-1066-4d88-9302-b74bac50a95c"}</pre>
+            <h2>SDK and Tools</h2>
+            <p>See the <a href="https://github.com/CubeCoders/AMP/wiki/Getting-started-with-AMP-developer-licences" target="_blank">AMP Wiki</a> for information on obtaining the full SDK and a developer licence to write your own AMP plugins and modules.</p>
+            <p>Check out <a href="https://github.com/p0t4t0sandwich" target="_blank">ThePotatoKing</a> on GitHub for a quick start to working with AMP's API! They are a community contributor who has created multiple ways to work with the API in different languages.</p>
+        </div>
+        <div data-bind="visible: name !== ''">
+            <h1 data-bind="text: displayName">API.Core.GetActiveAMPSessions</h1>
+            <h3 data-bind="text: endPoint">/API/Core/GetActiveAMPSessions</h3>
+            <p data-bind="text: description">No description</p>
+            <h3>Returns: <span data-bind="text: returnType">IEnumerable&lt;JObject&gt;</span></h3>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Parameter</th>
+                        <th>Type</th>
+                        <th>Description</th>
+                        <th>Required</th>
+                    </tr>
+                </thead>
+                <tbody data-bind="foreach: params"></tbody>
+            </table>
+
+            <h2>Invocation</h2>
+            <p>URL</p>
+            <pre>POST /API/<span data-bind="text: module">Core</span>/<span data-bind="text: name">GetActiveAMPSessions</span></pre>
+            <p>Request Headers</p>
+            <pre>Accept: application/json
+User-Agent: MyApplication/1.0</pre>
+            <p>Body Payload</p>
+            <pre data-bind="text: sampleInvocationJSON">{
+    "SESSIONID": ""
+}</pre>
+            <!-- ko if: ($root.related().count > 0) --><!-- /ko -->
+        </div>
+    </div>

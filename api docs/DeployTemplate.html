@@ -1,0 +1,198 @@
+<div data-bind="with: currentDoc" id="docsView">
+        <div data-bind="visible: name === ''" style="display: none;">
+            <h1>API Documentation Browser</h1>
+            <h2 id="AMPVersion"></h2>
+            <p><em>Note: To see the full API specification without logging in, you must edit the following setting in AMPConfig.conf:</em></p>
+            <pre>Security.AllowAPIDiscoveryWithoutLogin=True</pre>
+            <p>AMP API calls are performed by making a POST request to the endpoint for a given call. All requests must have the following header appended:</p>
+            <pre>Accept: text/javascript or Accept: application/json</pre>
+            <p>Parameters are passed in the form of a JSON blob containing all the parameters as an object (the parameters are fields within that object). This should be posted as a parameter in the POST body called "parameters"</p>
+            <p>To perform any API calls you must first call the Core/Login method which will return a session ID. The session id must be passed along with the parameters JSON blob with a field called "SESSIONID"</p>
+            <h2>Example</h2>
+            <p>If you wished to modify the EnableVoiceChat setting in the ARMA3 module after logging in. You'd make an API call to the following endpoint:</p>
+            <pre>http://localhost:8080/API/Core/SetConfig</pre>
+            <p>And your POST body would be the following (where the SESSIONID was obtained by making a login call):</p>
+            <pre>{"node":"Arma3Module.Arma3Settings.EnableVoiceChat","value":false, SESSIONID: "4202b4ca-1066-4d88-9302-b74bac50a95c"}</pre>
+            <h2>SDK and Tools</h2>
+            <p>See the <a href="https://github.com/CubeCoders/AMP/wiki/Getting-started-with-AMP-developer-licences" target="_blank">AMP Wiki</a> for information on obtaining the full SDK and a developer licence to write your own AMP plugins and modules.</p>
+            <p>Check out <a href="https://github.com/p0t4t0sandwich" target="_blank">ThePotatoKing</a> on GitHub for a quick start to working with AMP's API! They are a community contributor who has created multiple ways to work with the API in different languages.</p>
+        </div>
+        <div data-bind="visible: name !== ''">
+            <h1 data-bind="text: displayName">API.ADSModule.DeployTemplate</h1>
+            <h3 data-bind="text: endPoint">/API/ADSModule/DeployTemplate</h3>
+            <p data-bind="text: description">No description</p>
+            <h3>Returns: <span data-bind="text: returnType">RunningTask</span></h3>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Parameter</th>
+                        <th>Type</th>
+                        <th>Description</th>
+                        <th>Required</th>
+                    </tr>
+                </thead>
+                <tbody data-bind="foreach: params">
+                    <tr>
+                        <td data-bind="text: Name">TemplateID</td>
+                        <td>
+                            <span data-bind="text: TypeName">Int32</span>
+                            <table data-bind="if: $data.ParamEnumValues != undefined"></table>
+                        </td>
+                        <td data-bind="text: Description">The ID of the template to be deployed, as per the Template Management UI in AMP itself.</td>
+                        <td data-bind="text: (Optional ? 'Optional' : 'Required')">Required</td>
+                    </tr>
+                
+                    <tr>
+                        <td data-bind="text: Name">NewUsername</td>
+                        <td>
+                            <span data-bind="text: TypeName">String</span>
+                            <table data-bind="if: $data.ParamEnumValues != undefined"></table>
+                        </td>
+                        <td data-bind="text: Description">If specified, AMP will create a new user with this name for this instance. Must be unique. If this user already exists, this will be ignored but the new instance will be assigned to this user.</td>
+                        <td data-bind="text: (Optional ? 'Optional' : 'Required')">Optional</td>
+                    </tr>
+                
+                    <tr>
+                        <td data-bind="text: Name">NewPassword</td>
+                        <td>
+                            <span data-bind="text: TypeName">String</span>
+                            <table data-bind="if: $data.ParamEnumValues != undefined"></table>
+                        </td>
+                        <td data-bind="text: Description">If 'NewUsername' is specified and the user doesn't already exist, the password that will be assigned to this user.</td>
+                        <td data-bind="text: (Optional ? 'Optional' : 'Required')">Optional</td>
+                    </tr>
+                
+                    <tr>
+                        <td data-bind="text: Name">NewEmail</td>
+                        <td>
+                            <span data-bind="text: TypeName">String</span>
+                            <table data-bind="if: $data.ParamEnumValues != undefined"></table>
+                        </td>
+                        <td data-bind="text: Description">If 'NewUsername' is specified and the user doesn't already exist, the email address that will be assigned to this user.</td>
+                        <td data-bind="text: (Optional ? 'Optional' : 'Required')">Optional</td>
+                    </tr>
+                
+                    <tr>
+                        <td data-bind="text: Name">RequiredTags</td>
+                        <td>
+                            <span data-bind="text: TypeName">List&lt;String&gt;</span>
+                            <table data-bind="if: $data.ParamEnumValues != undefined"></table>
+                        </td>
+                        <td data-bind="text: Description">If specified, AMP will only deploy this template to targets that have every single 'tag' specified in their target configuration. You can adjust this via the controller by clicking 'Edit' on the target settings.</td>
+                        <td data-bind="text: (Optional ? 'Optional' : 'Required')">Optional</td>
+                    </tr>
+                
+                    <tr>
+                        <td data-bind="text: Name">Tag</td>
+                        <td>
+                            <span data-bind="text: TypeName">String</span>
+                            <table data-bind="if: $data.ParamEnumValues != undefined"></table>
+                        </td>
+                        <td data-bind="text: Description">Unrelated to RequiredTags. This is to uniquely identify this instance to your own systems. It may be something like an order ID or service ID so you can find the associated instance again at a later time. If 'UseTagAsInstanceName' is enabled, then this will also be used as the instance name for the created instance - but it must be unique.</td>
+                        <td data-bind="text: (Optional ? 'Optional' : 'Required')">Optional</td>
+                    </tr>
+                
+                    <tr>
+                        <td data-bind="text: Name">FriendlyName</td>
+                        <td>
+                            <span data-bind="text: TypeName">String</span>
+                            <table data-bind="if: $data.ParamEnumValues != undefined"></table>
+                        </td>
+                        <td data-bind="text: Description">A friendly name for this instance. If left blank, AMP will generate one for you.</td>
+                        <td data-bind="text: (Optional ? 'Optional' : 'Required')">Optional</td>
+                    </tr>
+                
+                    <tr>
+                        <td data-bind="text: Name">Secret</td>
+                        <td>
+                            <span data-bind="text: TypeName">String</span>
+                            <table data-bind="if: $data.ParamEnumValues != undefined"></table>
+                        </td>
+                        <td data-bind="text: Description">Must be a non-empty strong in order to get a callback on deployment state change. This secret will be passed back to you in the callback so you can verify the request.</td>
+                        <td data-bind="text: (Optional ? 'Optional' : 'Required')">Optional</td>
+                    </tr>
+                
+                    <tr>
+                        <td data-bind="text: Name">PostCreate</td>
+                        <td>
+                            <span data-bind="text: TypeName">PostCreateAppActions</span>
+                            <table data-bind="if: $data.ParamEnumValues != undefined">
+                                <thead>
+                                    <tr>
+                                        <th>Key</th>
+                                        <th>Value</th>
+                                    </tr>
+                                </thead>
+                                <tbody data-bind="foreach: Object.keys(ParamEnumValues)">
+                                    <tr>
+                                        <th data-bind="text: $data">DoNothing</th>
+                                        <th data-bind="text: $parent.ParamEnumValues[$data]">0</th>
+                                    </tr>
+                                
+                                    <tr>
+                                        <th data-bind="text: $data">UpdateOnce</th>
+                                        <th data-bind="text: $parent.ParamEnumValues[$data]">1</th>
+                                    </tr>
+                                
+                                    <tr>
+                                        <th data-bind="text: $data">UpdateAlways</th>
+                                        <th data-bind="text: $parent.ParamEnumValues[$data]">2</th>
+                                    </tr>
+                                
+                                    <tr>
+                                        <th data-bind="text: $data">UpdateAndStartOnce</th>
+                                        <th data-bind="text: $parent.ParamEnumValues[$data]">3</th>
+                                    </tr>
+                                
+                                    <tr>
+                                        <th data-bind="text: $data">UpdateAndStartAlways</th>
+                                        <th data-bind="text: $parent.ParamEnumValues[$data]">4</th>
+                                    </tr>
+                                
+                                    <tr>
+                                        <th data-bind="text: $data">StartAlways</th>
+                                        <th data-bind="text: $parent.ParamEnumValues[$data]">5</th>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                        <td data-bind="text: Description">0: Do Nothing, 1: Update Once, 2: Update Always, 3: Update and Start Once, 4: Update and Start Always, 5. Start Always</td>
+                        <td data-bind="text: (Optional ? 'Optional' : 'Required')">Optional</td>
+                    </tr>
+                
+                    <tr>
+                        <td data-bind="text: Name">ExtraProvisionSettings</td>
+                        <td>
+                            <span data-bind="text: TypeName">Dictionary&lt;String, String&gt;</span>
+                            <table data-bind="if: $data.ParamEnumValues != undefined"></table>
+                        </td>
+                        <td data-bind="text: Description">A dictionary of setting nodes and values to create the new instance with. Identical in function to the provisioning arguments in the template itself.</td>
+                        <td data-bind="text: (Optional ? 'Optional' : 'Required')">Optional</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h2>Invocation</h2>
+            <p>URL</p>
+            <pre>POST /API/<span data-bind="text: module">ADSModule</span>/<span data-bind="text: name">DeployTemplate</span></pre>
+            <p>Request Headers</p>
+            <pre>Accept: application/json
+User-Agent: MyApplication/1.0</pre>
+            <p>Body Payload</p>
+            <pre data-bind="text: sampleInvocationJSON">{
+    "TemplateID": 0,
+    "NewUsername": "NewUsername",
+    "NewPassword": "NewPassword",
+    "NewEmail": "NewEmail",
+    "RequiredTags": [],
+    "Tag": "Tag",
+    "FriendlyName": "FriendlyName",
+    "Secret": "Secret",
+    "PostCreate": 0,
+    "ExtraProvisionSettings": {},
+    "SESSIONID": ""
+}</pre>
+            <!-- ko if: ($root.related().count > 0) --><!-- /ko -->
+        </div>
+    </div>
